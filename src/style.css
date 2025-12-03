@@ -3,7 +3,7 @@ body {
   background-image:
     radial-gradient(1200px 600px at 10% 10%, rgba(123,97,255,0.06), transparent),
     radial-gradient(900px 400px at 90% 80%, rgba(255,107,183,0.05), transparent),
-    url("/assets/space5.jpg")
+    url("/assets/space5.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
