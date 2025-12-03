@@ -1,0 +1,673 @@
+/* ---------- galaxy background for the whole page (slightly stronger) ---------- */
+body {
+  background-image:
+    radial-gradient(1200px 600px at 10% 10%, rgba(123,97,255,0.06), transparent),
+    radial-gradient(900px 400px at 90% 80%, rgba(255,107,183,0.05), transparent),
+    url(./assets/space5.jpg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* ensure hero is readable on top of galaxy background */
+.hero {
+  background: linear-gradient(180deg, rgba(5,4,10,0.6), rgba(5,4,10,0.35));
+  padding: 1.2rem;
+}
+
+/* ---------- Events wrapper: vertical snap ---------- */
+.events-wrapper {
+  height: 72vh;                /* visible area for cards */
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  -webkit-overflow-scrolling: touch;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding-right: 0.25rem;      /* allow space for scrollbar on desktop */
+}
+
+/* each card snaps to start */
+.event-card {
+  scroll-snap-align: start;
+  min-height: 64vh;           /* so one card mostly fills viewport */
+  display: block;             /* ensure card takes full width */
+  padding: 0;
+  overflow: visible;          /* allow planet to overflow */
+  border-radius: 16px;
+}
+
+/* make card body fill height so button stays at bottom */
+.event-card .card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 1.25rem;
+}
+
+/* ensure badges and text look good over the galaxy BG */
+.event-card .badge {
+  font-size: .78rem;
+  padding: .35rem .5rem;
+}
+
+/* larger, thumb-friendly Explore button */
+.event-card .btn {
+  min-height: 48px;
+  font-weight: 600;
+}
+
+/* small screens: reduce sizes a bit */
+@media (max-width: 576px) {
+  .events-wrapper { height: 78vh; }
+  .event-card { min-height: 68vh; }
+  .planet-img { width: 72px; height: 72px; top: -18px; right: 14px; }
+  .hero .display-6 { font-size: 1.4rem; }
+}
+
+/* accessibility: visible focus states */
+.event-card .btn:focus,
+.event-card .btn:active {
+  outline: 3px solid rgba(123,97,255,0.18);
+  outline-offset: 2px;
+}
+
+/* small visual tweak for the card look */
+.card-dark {
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border: 1px solid rgba(255,255,255,0.04);
+}
+
+/* maintain contrast for small text on galaxy background */
+.small, .text-muted { color: rgba(234,240,255,0.8) !important; }
+
+/* scrollbar styling (optional, modern browsers) */
+.events-wrapper::-webkit-scrollbar { width: 10px; }
+.events-wrapper::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.06);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+/* ---- Softer Frosted Glass Cards ---- */
+.event-card,
+.card-dark {
+  background: rgba(255, 255, 255, 0.04);      /* lighter transparency */
+  backdrop-filter: blur(10px) saturate(140%); /* softer blur */
+  -webkit-backdrop-filter: blur(10px) saturate(140%);
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.08); /* lighter border */
+  box-shadow:
+    0 6px 20px rgba(0, 0, 0, 0.45),
+    0 0 8px rgba(255, 255, 255, 0.04) inset;
+  transition: 0.25s ease;
+}
+
+.event-card:hover {
+  background: rgba(255, 255, 255, 0.06);   /* subtle hover */
+  border-color: rgba(255, 255, 255, 0.12);
+  transform: translateY(-1.5px);
+}
+/* ---- Smaller Card Height ---- */
+.event-card {
+  min-height: 42vh;        /* previously 64vh */
+  padding-bottom: 1rem;
+}
+@media (max-width: 576px) {
+  .event-card {
+    min-height: 50vh;      /* mobile still needs a bit taller for text */
+  }
+}
+
+/* ===== Planets: ensure they pop out above everything ===== */
+
+/* Make sure the wrapper doesn't clip floating content */
+.events-wrapper {
+  position: relative;   /* establishes a predictable stacking context */
+  z-index: 1;
+}
+
+/* Allow each card to overflow (so the planet can sit outside the card) */
+.event-card {
+  position: relative;   /* parent for absolute planet */
+  overflow: visible;    /* allow planet to overflow the card boundary */
+  z-index: 10;          /* base z-index for the card itself */
+  /* keep transform hover but avoid creating a higher stacking context than planet */
+  will-change: transform;
+}
+
+/* Slightly shrink on very small screens so it doesn't dominate */
+@media (max-width: 420px) {
+  .planet-img {
+    width: 86px;
+    height: 86px;
+    top: -22px;
+    right: 10px;
+  }
+}
+
+/* If any other section has explicit z-index or transforms, make sure planets still show:
+   lower those sections' stacking contexts if they are unnecessarily high. */
+section, .hero, #schedule, #about, #register {
+  z-index: 0;
+}
+
+/* Maintain the softer frost hover transform but avoid it creating a stacking context
+   that would leapfrog the planet. A small translate is ok. */
+.event-card:hover {
+  transform: translateY(-1px);
+}
+
+.planet-img {
+  width: 100%;            /* fills wrapper width */
+  height: auto;           /* keeps natural aspect ratio */
+  object-fit: contain;    /* no distortion, no cropping */
+  object-position: center;
+  filter: drop-shadow(0 4px 14px rgba(0,0,0,0.4));
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Container inside the card */
+.planet-wrapper {
+  position: absolute;
+  top: 35%;               /* center vertically */
+  right: 16px;            /* slightly inset from right edge */
+  transform: translateY(-50%); /* perfect vertical centering */
+  width: 100px;           /* smaller, cleaner size */
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 5;
+  pointer-events: none;
+}
+@media (max-width: 480px) {
+  .planet-wrapper {
+    width: 80px;
+    right: 10px;
+  }
+}
+
+/* ---------- Event page card & image styles ---------- */
+.events-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* full-width event card style */
+.event-full {
+  overflow: visible;
+  padding: 0;
+  transition: transform .28s cubic-bezier(.2,.9,.2,1), box-shadow .28s ease, filter .28s ease;
+  transform-origin: center;
+}
+
+/* gentle hover lift and scale */
+.card-hover, .event-full:hover {
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 0 18px 44px rgba(2,6,23,0.55), 0 6px 18px rgba(123,97,255,0.06);
+}
+
+/* subtle tilt on pointer move (progressive enhancement) */
+.event-full:active { transform: translateY(-2px) scale(1.005); }
+
+/* event image */
+.event-image {
+  width: 100%;
+  max-height: 44vh;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  border: 1px solid rgba(255,255,255,0.04);
+  transition: transform .45s cubic-bezier(.2,.9,.2,1), filter .3s ease;
+}
+
+/* image hover zoom (desktop) */
+.event-full:hover .event-image {
+  transform: scale(1.03);
+  filter: saturate(1.06);
+}
+
+/* card body spacing */
+.event-full .card-body {
+  padding: 1.25rem;
+}
+
+/* smaller screens: compress images & spacing */
+@media (max-width: 576px) {
+  .event-image { max-height: 40vh; }
+  .event-full .card-body { padding: 1rem; }
+}
+
+/* badges & headings */
+.event-full h2 { margin-bottom: 0.35rem; }
+.event-full .small { color: rgba(234,240,255,0.78); }
+
+.map-container iframe {
+  border-radius: 12px;
+  filter: brightness(0.9) contrast(1.1);
+}
+/* Floating frosted dark navbar */
+.frosted-nav {
+  position: fixed;
+  bottom: 24px;                /* floating height */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 92%;
+  padding: 12px 18px;
+
+  background: rgba(0, 0, 0, 0.20);     /* 20% opacity dark glass */
+  backdrop-filter: blur(14px) saturate(180%);
+  -webkit-backdrop-filter: blur(14px) saturate(180%);
+
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 18px;
+
+  z-index: 999;
+  box-shadow:
+    0 6px 22px rgba(0,0,0,0.45),
+    0 2px 6px rgba(0,0,0,0.3);
+}
+
+/* Nav link style */
+.frosted-nav .nav-link-item {
+  color: #ffffff !important;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: 0.25s ease;
+}
+
+.frosted-nav .nav-link-item:hover {
+  color: #cfe0ff !important;
+  transform: translateY(-2px);
+}
+
+/* Prevent content from being blocked by floating nav */
+body {
+  padding-bottom: 120px;
+}
+
+/* Floating top bar (similar to bottom nav) */
+.top-brand-bar {
+  position: fixed;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  width: 92%;                     /* same width as bottom nav */
+  background: rgba(0, 0, 0, 0.90);
+  padding: 10px 16px;
+
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,0.12);
+
+  box-shadow:
+    0 6px 22px rgba(0,0,0,0.45),
+    0 2px 6px rgba(0,0,0,0.3);
+
+  z-index: 9999;
+}
+
+/* Default top bar size */
+.top-brand-bar {
+  transition: all 0.25s ease;
+  padding: 10px 16px;
+  transform: translateX(-50%) scale(1);
+}
+
+/* Shrunk version */
+.top-brand-bar.shrink {
+  padding: 6px 14px;
+  border-radius: 14px;
+  transform: translateX(-50%) scale(0.92);
+  opacity: 0.92;
+}
+
+/* Smooth transition for text & logo */
+.top-brand-bar .brand-logo {
+  transition: transform 0.25s ease;
+}
+
+.top-brand-bar.shrink .brand-logo {
+  transform: scale(0.85);
+}
+
+.top-brand-bar .brand-title {
+  transition: font-size 0.25s ease;
+}
+
+.top-brand-bar.shrink .brand-title {
+  font-size: 0.9rem;
+}
+
+
+/* Make content aligned horizontally */
+.top-brand-bar .container-lg {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  padding: 0;
+}
+
+/* Logo + text stay clean */
+.brand-logo {
+  width: 32px;
+  height: 32px;
+}
+
+.brand-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+
+/* Logo styling */
+.brand-logo {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+/* One-line name + blitz */
+.brand-title {
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  display: flex;
+  align-items: center;
+}
+
+/* Responsive tuning */
+@media (max-width: 480px) {
+  .brand-title {
+    font-size: 0.9rem;      /* slightly smaller for phones */
+  }
+  .brand-logo {
+    width: 30px;
+    height: 30px;
+  }
+}
+/* Hero Section */
+.hero-section {
+  min-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  background: transparent;
+}
+
+/* Description below logo */
+.hero-description {
+  max-width: 480px;
+  color: rgba(255,255,255,0.85);
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+/* Mobile optimizations */
+@media (max-width: 480px) {
+  .hero-logo {
+    width: 300px;
+  }
+
+}
+
+
+
+/* fade-in animation (wrapper then logo) */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* hero description style (typewriter) */
+.hero-description {
+  max-width: 620px;
+  color: rgba(255,255,255,0.92);
+  font-size: 1.05rem;
+  font-weight: 400;
+  line-height: 1.45;
+  margin-top: 1rem;
+  min-height: 3.2rem;               /* prevents layout shift while typing */
+  letter-spacing: 0.1px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* typewriter caret (blinking) */
+.hero-description::after {
+  content: '|';
+  margin-left: 6px;
+  opacity: 1;
+  animation: blink 1s steps(2, start) infinite;
+  font-weight: 600;
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+/* Respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .hero-logo-wrapper, .hero-logo { animation: none !important; transform: none !important; opacity: 1 !important; }
+  .hero-description::after { display: none; }
+}
+
+/* ========== Improved Hero Layout ========== */
+
+.hero-section {
+  min-height: 60vh;                     /* reduced height */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;              /* center vertically */
+  align-items: center;
+  text-align: center;
+  padding: 0;                            /* remove extra space */
+  margin: 0;
+}
+
+/* ========== Hero Section Updated ========== */
+
+.hero-section {
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  margin: 0;
+}
+
+/* Pure white background wrapper behind logo */
+.hero-logo-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #ffffff;                   /* PURE white again */
+  padding: 28px;                         /* bigger box */
+  border-radius: 22px;                   /* nicer curve */
+  border: 1px solid rgba(0,0,0,0.08);    /* subtle border */
+
+  box-shadow: 0 20px 45px rgba(0,0,0,0.45);
+  
+  opacity: 0;                            /* fade start */
+  transform: translateY(10px);
+}
+
+/* Bigger Logo (cleanest look) */
+.hero-logo {
+  width: 200px;                          /* bigger logo */
+  height: auto;
+  object-fit: contain;
+  opacity: 0;
+  transform: translateY(6px);
+}
+
+/* Fade-in */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.hero-logo-wrapper.in {
+  animation: fadeUp 0.55s cubic-bezier(.2,.9,.25,1) forwards;
+}
+
+.hero-logo-wrapper.in .hero-logo {
+  animation: fadeUp 0.55s cubic-bezier(.2,.9,.25,1) 0.15s forwards;
+}
+
+/* Description */
+.hero-description {
+  max-width: 620px;
+  margin-top: 16px;
+  margin-bottom: 0;
+
+  color: rgba(255,255,255,0.92);
+
+  font-size: 1.15rem;      /* ⬆ bigger */
+  font-weight: 400;
+  line-height: 1.55;       /* nicer spacing */
+  letter-spacing: 0.3px;
+
+  min-height: 2.8rem;      /* prevents layout jump */
+  white-space: pre-wrap;
+}
+
+
+/* Typewriter cursor */
+.hero-description::after {
+  content: '|';
+  margin-left: 6px;
+  animation: blink 1s steps(2, start) infinite;
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%,100% { opacity: 0; }
+}
+
+/* Mobile updates */
+@media (max-width: 480px) {
+  .hero-logo-wrapper { padding: 22px; border-radius: 18px; }
+  .hero-logo { width: 165px; }
+  .hero-description { font-size: 0.9rem; }
+}
+
+/* Fix mobile gaps: reduce bottom padding and tighten hero spacing */
+@media (max-width: 576px) {
+  /* Reduce the extra space reserved for floating nav on mobile */
+  body {
+    padding-bottom: 84px; /* previously 120px — lowered for phones */
+  }
+
+  /* Make hero more compact on phones */
+  .hero-section {
+    min-height: 54vh;    /* slightly smaller on mobile */
+    padding-top: 10px;
+    padding-bottom: 8px;
+  }
+
+  /* Remove any bottom gap after the typewriter text */
+  .hero-description {
+    margin-bottom: 0 !important;
+    min-height: 2.0rem;  /* keep small to avoid jump */
+  }
+
+  /* If header had bottom margin, remove it for narrow screens */
+  header, .top-brand-bar {
+    margin-bottom: 0;
+  }
+
+  /* If any cards or sections have big top margins that push things,
+     slightly reduce them on mobile */
+  main > section {
+    margin-top: 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  /* If bottom nav height is different, tweak padding further */
+  .frosted-nav {
+    bottom: 18px;
+    padding: 10px 14px;
+  }
+}
+
+.hero-description,
+.hero-section,
+.brand-title {
+  font-family: 'Inter', system-ui, sans-serif !important;
+}
+
+@media (max-width: 480px) {
+  .hero-description {
+    font-size: 1rem;       /* still bigger than before */
+    line-height: 1.45;
+    letter-spacing: 0.25px;
+  }
+}
+@font-face {
+  font-family: 'ShortcutShadow';
+  src: url('../public/fonts/shortcut/Shourtcut.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.blitz-font {
+  font-family: 'ShortcutShadow', sans-serif;
+}
+
+.blitz-font {
+  color: #000;
+  font-size: 6rem;
+  text-shadow:
+    4px 4px 0px #000000,
+    7px 7px 0px cornflowerblue,
+    10px 10px 0px #ff00ff;
+}
+
+@font-face {
+  font-family: 'Amcap';
+  src: url('../public/fonts/shortcut/amcap/AmcapEternal-xK95.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+@keyframes letterBounce {
+  0%   { opacity: 0; transform: translateY(10px) scale(0.8); }
+  60%  { opacity: 1; transform: translateY(-3px) scale(1.05); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.mm-letter {
+  display: inline-block;
+  opacity: 0;
+  animation: letterBounce 0.45s ease forwards;
+}
+
+.logo-box {
+  width: 80px;
+  height: 80px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  margin-top: 6px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;       /* keeps logo nicely inside */
+}
+

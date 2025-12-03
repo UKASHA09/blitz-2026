@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Day 1 — Sports — Blitz</title>
+</head>
+<body class="bg-black text-light">
+  <header class="py-4 text-center">
+    <a href="/index.html" class="text-muted small d-block mb-2">&larr; Back</a>
+    <h1 class="display-6 fw-bold">COMBAT DIMENSION</h1>
+    <p class="small text-muted">A high-energy day of football, cricket and endurance challenges.</p>
+  </header>
+
+  <main class="container py-3">
+    <!-- Events list: vertical scroll, one after another -->
+    <section class="events-vertical">
+
+      <!-- ----- Football Card ----- -->
+      <article class="event-full card card-dark mb-4 rounded-3">
+        <div class="card-body d-flex flex-column">
+          <h2 class= "h5" style="color: aliceblue;">Football Tournament</h2>
+          <p class="small text-muted">5-a-side campus tournament. Knockout stages, friendly rules, prizes for winners.</p>
+
+          <div class="mt-3">
+            <img src="../src/assets/football.jpg" alt="Football" class="event-image rounded-2" />
+          </div>
+
+          <div class="mt-3">
+            <h3 class="h6" style="color: red;">Rules</h3>
+            <ul class="small text-muted">
+              <li>Teams of up to 7 players (5 on-field)</li>
+              <li>Match length: 12 minutes per half</li>
+              <li>Normal fouls & sportsmanship rules apply</li>
+            </ul>
+          </div>
+
+          <div class="mt-3 d-flex gap-2">
+            <a class="btn btn-primary" href="https://forms.gle/YOUR_FOOTBALL_FORM" target="_blank" rel="noreferrer">Register</a>
+            <a class="btn btn-outline-light" href="/assets/football-rules.pdf" target="_blank">Download Rules</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- ----- Cricket Card ----- -->
+      <article class="event-full card card-dark mb-4 rounded-3">
+        <div class="card-body d-flex flex-column">
+          <h2 class="h5" style="color: aliceblue;">Cricket Quick Cup</h2>
+          <p class="small text-muted">Short-format campus cricket: 8 overs per side, powerplay rules, fielding limits.</p>
+
+          <div class="mt-3">
+            <img src="../src/assets/cricket3.jpg" alt="Cricket" class="event-image rounded-2" />
+          </div>
+
+          <div class="mt-3">
+            <h3 class="h6" style="color: red;">Rules</h3>
+            <ul class="small text-muted">
+              <li>Team size: up to 9 players (8 on-field)</li>
+              <li>8 overs per side, 2 overs per bowler max</li>
+              <li>LBW rules simplified for quick play</li>
+            </ul>
+          </div>
+
+          <div class="mt-3 d-flex gap-2">
+            <a class="btn btn-primary" href="https://forms.gle/YOUR_CRICKET_FORM" target="_blank" rel="noreferrer">Register</a>
+            <a class="btn btn-outline-light" href="/assets/cricket-rules.pdf" target="_blank">Download Rules</a>
+          </div>
+        </div>
+      </article>
+
+    </section>
+  </main>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>
