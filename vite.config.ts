@@ -1,8 +1,6 @@
-import { defineConfig } from 'vite';
+import { defineConfig } from "vite";
 
 export default defineConfig({
-  base: "/blitz-2026/",   // REQUIRED FOR GITHUB PAGES
-
   server: {
     host: true,
     allowedHosts: [
