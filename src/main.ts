@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const infoBody = document.getElementById('infoBody') as HTMLElement | null;
     let bsModal: any;
     for (const btn of Array.from(infoButtons)) {
-      btn.addEventListener('click', (ev) => {
+    btn.addEventListener('click', () => {
         const t = btn.dataset.title || 'Event';
         const s = btn.dataset.sub || '';
         if (infoTitle) infoTitle.textContent = t;
